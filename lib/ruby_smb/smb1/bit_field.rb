@@ -19,6 +19,13 @@ module RubySMB
       require 'ruby_smb/smb1/bit_field/smb_nmpipe_status'
       require 'ruby_smb/smb1/bit_field/share_access'
       require 'ruby_smb/smb1/bit_field/create_options'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_flags'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_desired_access'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_share_access'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_create_disposition'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_create_options'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_impersonation_level'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_security_flags'
     end
   end
 end
