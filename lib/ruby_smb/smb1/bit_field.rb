@@ -26,6 +26,9 @@ module RubySMB
       require 'ruby_smb/smb1/bit_field/nt_create_andx_create_options'
       require 'ruby_smb/smb1/bit_field/nt_create_andx_impersonation_level'
       require 'ruby_smb/smb1/bit_field/nt_create_andx_security_flags'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_oplock_level'
+      require 'ruby_smb/smb1/bit_field/nt_create_andx_resource_type'
+      require 'ruby_smb/smb1/bit_field/write_andx_write_mode'
     end
   end
 end

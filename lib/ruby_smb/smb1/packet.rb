@@ -21,6 +21,11 @@ module RubySMB
       require 'ruby_smb/smb1/packet/nt_trans'
       require 'ruby_smb/smb1/packet/trans'
       require 'ruby_smb/smb1/packet/nt_create_andx_request'
+      require 'ruby_smb/smb1/packet/nt_create_andx_response'
+      require 'ruby_smb/smb1/packet/write_andx_request'
+      require 'ruby_smb/smb1/packet/write_andx_response'
+      require 'ruby_smb/smb1/packet/read_andx_request'
+      require 'ruby_smb/smb1/packet/read_andx_response'
     end
   end
 end

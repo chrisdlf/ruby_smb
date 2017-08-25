@@ -8,7 +8,9 @@ module RubySMB
         require 'ruby_smb/smb1/packet/trans/data_block'
         require 'ruby_smb/smb1/packet/trans/subcommands'
         require 'ruby_smb/smb1/packet/trans/request'
-        require 'ruby_smb/smb1/packet/trans/transact_nmpipe'
+        require 'ruby_smb/smb1/packet/trans/response'
+        require 'ruby_smb/smb1/packet/trans/transact_nmpipe_request'
+        require 'ruby_smb/smb1/packet/trans/transact_nmpipe_response'
       end
     end
   end
