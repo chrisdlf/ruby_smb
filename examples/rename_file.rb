@@ -13,14 +13,14 @@ address  = ARGV[0]
 username = ARGV[1]
 password = ARGV[2]
 share    = ARGV[3]
-file     = ARGV[4]
+filename = ARGV[4]
 new_name = ARGV[5]
 path     = "\\\\#{address}\\#{share}"
 
 sock = TCPSocket.new address, 445
 dispatcher = RubySMB::Dispatcher::Socket.new(sock)
 
-client = RubySMB::Client.new(dispatcher, smb1: false, smb2: true, username: username, password: password)
+client = RubySMB::Client.new(dispatcher, smb1: true, smb2: true, username: username, password: password)
 
 protocol = client.negotiate
 status = client.authenticate
@@ -34,8 +34,12 @@ rescue StandardError => e
   puts "Failed to connect to #{path}: #{e.message}"
 end
 
-file = tree.open_file(filename: file, write: true, delete: true)
+if protocol == 'SMB1'
+  data = tree.rename(filename, new_name)
+else
+  file = tree.open_file(filename: filename, write: true, delete: true)
+  data = file.rename(new_name)
+end
 
-data = file.rename(new_name)
 puts data
-file.close
+file.close if file
