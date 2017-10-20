@@ -192,6 +192,44 @@ module RubySMB
 
         results
       end
+      #
+      # Rename a file. The file cannot be open for this operation since SMB1
+      # RenameRequest packet look for the old filename instead of using the FID
+      # to find the file. As a result, a share violation occurs if the file is
+      # already open.
+      #
+      # @param old_file_name [String] the old name (null-terminated string)
+      # @param new_file_name [String] the new name (null-terminated string)
+      # @return [WindowsError::ErrorCode] the NTStatus Response code
+      def rename(old_file_name, new_file_name)
+        raw_response = @client.send_recv(rename_packet(old_file_name, new_file_name))
+        response = RubySMB::SMB1::Packet::RenameRequest.read(raw_response)
+        unless response.smb_header.command == RubySMB::SMB1::Commands::SMB_COM_RENAME
+          raise RubySMB::Error::InvalidPacket, 'Not a RenameResponse packet'
+        end
+        unless response.status_code == WindowsError::NTStatus::STATUS_SUCCESS
+          raise RubySMB::Error::UnexpectedStatusCode, response.status_code.name
+        end
+        response.status_code
+      end
+
+      # Crafts the RenameRequest packet to be sent for rename operations.
+      #
+      # @param old_file_name [String] the old name (null-terminated string)
+      # @param new_file_name [String] the new name (null-terminated string)
+      # @return [RubySMB::SMB1::Packet::RenameRequest] the set info packet
+      def rename_packet(old_file_name, new_file_name)
+        rename_request = set_header_fields(RubySMB::SMB1::Packet::RenameRequest.new)
+        unicode_enabled = rename_request.smb_header.flags2.unicode == 1
+        old_filename = add_null_termination(str: old_file_name, unicode: unicode_enabled)
+        new_filename = add_null_termination(str: new_file_name, unicode: unicode_enabled)
+        rename_request.data_block.old_file_name                    = old_filename
+        rename_request.data_block.new_file_name                    = new_filename
+        rename_request.parameter_block.search_attributes.hidden    = 1
+        rename_request.parameter_block.search_attributes.system    = 1
+        rename_request.parameter_block.search_attributes.directory = 1
+        rename_request
+      end
 
       # Sets a few preset header fields that will always be set the same
       # way for Tree operations. This is, the TreeID and Extended Attributes.
