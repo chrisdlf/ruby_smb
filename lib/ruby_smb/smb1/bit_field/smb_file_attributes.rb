@@ -5,6 +5,8 @@ module RubySMB
       # [2.2.1.2.4 SMB_FILE_ATTRIBUTES](https://msdn.microsoft.com/en-us/library/ee441551.aspx)
       class SmbFileAttributes < BinData::Record
         endian :little
+
+        # It is 'Normal File' attribute when no bit is set (0x000)
         bit2  :reserved,     label: 'Reserved Space'
         bit1  :archive,      label: 'Archive'
         bit1  :directory,    label: 'Directory'

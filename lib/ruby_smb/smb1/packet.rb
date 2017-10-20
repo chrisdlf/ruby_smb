@@ -29,6 +29,8 @@ module RubySMB
       require 'ruby_smb/smb1/packet/write_andx_response'
       require 'ruby_smb/smb1/packet/close_request'
       require 'ruby_smb/smb1/packet/close_response'
+      require 'ruby_smb/smb1/packet/rename_request'
+      require 'ruby_smb/smb1/packet/rename_response'
     end
   end
 end
