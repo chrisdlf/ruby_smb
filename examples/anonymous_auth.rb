@@ -26,5 +26,9 @@ address  = ARGV[0]
 username = ''
 password = ''
 
+# Negotiate with both SMB1 and SMB2 enabled on the client
+run_authentication(address, true, true, username, password)
 # Negotiate with only SMB1 enabled
 run_authentication(address, true, false, username, password)
+# Negotiate with only SMB2 enabled
+run_authentication(address, false, true, username, password)
