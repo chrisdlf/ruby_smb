@@ -15,7 +15,11 @@ module RubySMB
             smb1_authenticate
           end
         else
-          smb2_authenticate
+          if username.empty? && password.empty?
+            smb2_anonymous_auth
+          else
+            smb2_authenticate
+          end
         end
       end
 
@@ -191,12 +195,21 @@ module RubySMB
 
       # Handles the SMB2 NTLMSSP 4-way handshake for Authentication and store
       # information about the peer/server.
-      def smb2_authenticate
+      def smb2_authenticate(anonymous: false)
         response = smb2_ntlmssp_negotiate
         challenge_packet = smb2_ntlmssp_challenge_packet(response)
         @session_id = challenge_packet.smb2_header.session_id
         type2_b64_message = smb2_type2_message(challenge_packet)
         type3_message = @ntlm_client.init_context(type2_b64_message)
+        if anonymous
+          # http://davenport.sourceforge.net/ntlm.html#theAnonymousResponse
+          type3_message.lm_response = "\0"
+          type3_message.ntlm_response = ""
+          # this flag is the "Negotiate Anonymous" flag and will need to be
+          # updated when https://github.com/WinRb/rubyntlm/pull/38 is merged
+          # and the new rubyntlm version is used.
+          type3_message.flag |= Net::NTLM::FLAGS[:MBZ7]
+        end
 
         @session_key = @ntlm_client.session_key
         challenge_message = ntlm_client.session.challenge_message
@@ -290,6 +303,10 @@ module RubySMB
         packet.smb2_header.session_id = session_id
         packet.set_type3_blob(type3_message.serialize)
         packet
+      end
+
+      def smb2_anonymous_auth
+        smb2_authenticate(anonymous: true)
       end
 
       # Extract and store useful information about the peer/server from the
