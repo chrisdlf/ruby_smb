@@ -10,6 +10,8 @@ module RubySMB
 
       # Raised when an invalid packet is received
       class InvalidPacket < DcerpcError; end
+
+      class WinregError < DcerpcError; end
     end
   end
 end
