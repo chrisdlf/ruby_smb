@@ -21,7 +21,7 @@ module RubySMB
         end
 
         def set(v)
-          if v.is_a?(Fixnum) && v == 0
+          if v.is_a?(Integer) && v == 0
             self.actual_count = 0
           else
             self.str = v
@@ -41,7 +41,7 @@ module RubySMB
         end
 
         def set(v)
-          if v.is_a?(Fixnum) && v == 0
+          if v.is_a?(Integer) && v == 0
             self.referent_identifier = v
           else
             self.ndr_str = v
@@ -111,7 +111,7 @@ module RubySMB
         end
 
         def set(v)
-          if v.is_a?(Fixnum) && v == 0
+          if v.is_a?(Integer) && v == 0
             self.referent_identifier = v
           else
             self.file_time = v

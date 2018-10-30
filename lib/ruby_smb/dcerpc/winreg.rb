@@ -190,6 +190,20 @@ module RubySMB
         enum_value_response.lp_value_name.to_s
       end
 
+      def has_registry_key?(key)
+        bind(endpoint: RubySMB::Dcerpc::Winreg)
+
+        root_key, sub_key = key.gsub(/\//, '\\').split('\\', 2)
+        root_key_handle = open_root_key(root_key)
+        begin
+          subkey_handle = open_key(root_key_handle, sub_key)
+        rescue RubySMB::Dcerpc::Error::WinregError
+          return false
+        end
+        close_key(subkey_handle)
+        return true
+      end
+
       def read_registry_key(key, value_name)
         bind(endpoint: RubySMB::Dcerpc::Winreg)
 

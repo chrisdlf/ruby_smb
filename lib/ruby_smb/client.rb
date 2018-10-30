@@ -432,11 +432,21 @@ module RubySMB
       session_request
     end
 
+    def has_registry_key?(host, key)
+      tree = tree_connect("\\\\#{host}\\IPC$")
+      named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
+      key_exists = named_pipe.has_registry_key?(key)
+      named_pipe.close
+      tree.disconnect!
+      key_exists
+    end
+
     def read_registry_key(host, key, value_name)
       tree = tree_connect("\\\\#{host}\\IPC$")
       named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
       value = named_pipe.read_registry_key(key, value_name)
       named_pipe.close
+      tree.disconnect!
       value
     end
 
@@ -445,6 +455,7 @@ module RubySMB
       named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
       value = named_pipe.enum_registry_key(key)
       named_pipe.close
+      tree.disconnect!
       value
     end
 
@@ -453,6 +464,7 @@ module RubySMB
       named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
       value = named_pipe.enum_registry_values(key)
       named_pipe.close
+      tree.disconnect!
       value
     end
 
