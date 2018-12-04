@@ -24,7 +24,7 @@ status = client.authenticate
 
 puts "#{protocol} : #{status}"
 
-key_value = client.read_registry_key(address, registry_key, value_name)
+key_value = client.read_registry_key_value(address, registry_key, value_name)
 puts key_value
 
 client.disconnect!

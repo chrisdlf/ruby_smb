@@ -8,6 +8,7 @@ module RubySMB
     require 'ruby_smb/client/tree_connect'
     require 'ruby_smb/client/echo'
     require 'ruby_smb/client/utils'
+    require 'ruby_smb/client/winreg'
 
     include RubySMB::Client::Negotiation
     include RubySMB::Client::Authentication
@@ -15,6 +16,7 @@ module RubySMB
     include RubySMB::Client::TreeConnect
     include RubySMB::Client::Echo
     include RubySMB::Client::Utils
+    include RubySMB::Client::Winreg
 
     # The Default SMB1 Dialect string used in an SMB1 Negotiate Request
     SMB1_DIALECT_SMB1_DEFAULT = 'NT LM 0.12'.freeze
@@ -430,42 +432,6 @@ module RubySMB
       session_request.session_header.packet_length =
         session_request.num_bytes - session_request.session_header.num_bytes
       session_request
-    end
-
-    def has_registry_key?(host, key)
-      tree = tree_connect("\\\\#{host}\\IPC$")
-      named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
-      key_exists = named_pipe.has_registry_key?(key)
-      named_pipe.close
-      tree.disconnect!
-      key_exists
-    end
-
-    def read_registry_key(host, key, value_name)
-      tree = tree_connect("\\\\#{host}\\IPC$")
-      named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
-      value = named_pipe.read_registry_key(key, value_name)
-      named_pipe.close
-      tree.disconnect!
-      value
-    end
-
-    def enum_registry_key(host, key)
-      tree = tree_connect("\\\\#{host}\\IPC$")
-      named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
-      value = named_pipe.enum_registry_key(key)
-      named_pipe.close
-      tree.disconnect!
-      value
-    end
-
-    def enum_registry_values(host, key)
-      tree = tree_connect("\\\\#{host}\\IPC$")
-      named_pipe = tree.open_file(filename: "winreg", write: true, read: true)
-      value = named_pipe.enum_registry_values(key)
-      named_pipe.close
-      tree.disconnect!
-      value
     end
 
   end

@@ -204,7 +204,7 @@ module RubySMB
         return true
       end
 
-      def read_registry_key(key, value_name)
+      def read_registry_key_value(key, value_name)
         bind(endpoint: RubySMB::Dcerpc::Winreg)
 
         root_key, sub_key = key.gsub(/\//, '\\').split('\\', 2)

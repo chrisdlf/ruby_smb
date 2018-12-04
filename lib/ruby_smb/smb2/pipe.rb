@@ -101,9 +101,10 @@ module RubySMB
             received_cmd:   ioctl_response.smb2_header.command
           )
         end
+        # TODO: improve the handling of STATUS_PENDING responses
         if ioctl_response.status_code == WindowsError::NTStatus::STATUS_PENDING
           sleep 1
-          ioctl_raw_response = @tree.client.send_recv(request)
+          ioctl_raw_response = @tree.client.dispatcher.recv_packet
           ioctl_response = RubySMB::SMB2::Packet::IoctlResponse.read(ioctl_raw_response)
           unless ioctl_response.valid?
             raise RubySMB::Error::InvalidPacket.new(
