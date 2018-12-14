@@ -3,6 +3,7 @@ module RubySMB
     MAX_XMIT_FRAG = 4280
     MAX_RECV_FRAG = 4280
 
+    require 'windows_error/win32'
     require 'ruby_smb/dcerpc/error'
     require 'ruby_smb/dcerpc/uuid'
     require 'ruby_smb/dcerpc/ndr'

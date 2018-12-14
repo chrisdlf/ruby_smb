@@ -69,8 +69,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading OpenRootKeyResponse (command = #{root_key_opnum})"
         end
-        unless root_key_response_packet.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when opening root key #{root_key}: #{WindowsError::NTStatus.find_by_retval(root_key_response_packet.error_status).join(',')}"
+        unless root_key_response_packet.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when opening root key #{root_key}: #{WindowsError::Win32.find_by_retval(root_key_response_packet.error_status.to_i).join(',')}"
         end
 
         root_key_response_packet.ph_key
@@ -88,8 +88,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the OpenKey response"
         end
-        unless open_key_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when opening sub-key #{sub_key}: #{WindowsError::NTStatus.find_by_retval(open_key_response.error_status).join(',')}"
+        unless open_key_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when opening sub-key #{sub_key}: #{WindowsError::Win32.find_by_retval(open_key_response.error_status.to_i).join(',')}"
         end
 
         open_key_response.phk_result
@@ -104,8 +104,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the QueryValue response"
         end
-        unless query_value_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when reading value #{value_name}: #{WindowsError::NTStatus.find_by_retval(query_value_response.error_status).join(',')}"
+        unless query_value_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when reading value #{value_name}: #{WindowsError::Win32.find_by_retval(query_value_response.error_status.to_i).join(',')}"
         end
 
         query_value_request_packet = RubySMB::Dcerpc::Winreg::QueryValueRequest.new(hkey: handle, lp_value_name: value_name)
@@ -117,8 +117,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the QueryValue response"
         end
-        unless query_value_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when reading value #{value_name}: #{WindowsError::NTStatus.find_by_retval(query_value_response.error_status).join(',')}"
+        unless query_value_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when reading value #{value_name}: #{WindowsError::Win32.find_by_retval(query_value_response.error_status.to_i).join(',')}"
         end
 
         query_value_response.data
@@ -132,8 +132,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the CloseKey response"
         end
-        unless close_key_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when closing the key: #{WindowsError::NTStatus.find_by_retval(close_key_response.error_status).join(',')}"
+        unless close_key_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when closing the key: #{WindowsError::Win32.find_by_retval(close_key_response.error_status.to_i).join(',')}"
         end
 
         close_key_response.error_status
@@ -147,8 +147,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the query_infoKey response"
         end
-        unless query_info_key_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when querying information: #{WindowsError::NTStatus.find_by_retval(query_info_key_response.error_status).join(',')}"
+        unless query_info_key_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when querying information: #{WindowsError::Win32.find_by_retval(query_info_key_response.error_status.to_i).join(',')}"
         end
 
         query_info_key_response
@@ -165,8 +165,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the EnumKey response"
         end
-        unless enum_key_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when enumerating the key: #{WindowsError::NTStatus.find_by_retval(enum_key_response.error_status).join(',')}"
+        unless enum_key_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when enumerating the key: #{WindowsError::Win32.find_by_retval(enum_key_response.error_status.to_i).join(',')}"
         end
 
         enum_key_response.lp_name.to_s
@@ -183,8 +183,8 @@ module RubySMB
         rescue IOError
           raise RubySMB::Dcerpc::Error::InvalidPacket, "Error reading the Enumvalue response"
         end
-        unless enum_value_response.error_status == WindowsError::NTStatus::STATUS_SUCCESS
-          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when enumerating values: #{WindowsError::NTStatus.find_by_retval(enum_value_response.error_status).join(',')}"
+        unless enum_value_response.error_status == WindowsError::Win32::ERROR_SUCCESS
+          raise RubySMB::Dcerpc::Error::WinregError, "Error returned when enumerating values: #{WindowsError::Win32.find_by_retval(enum_value_response.error_status.to_i).join(',')}"
         end
 
         enum_value_response.lp_value_name.to_s
