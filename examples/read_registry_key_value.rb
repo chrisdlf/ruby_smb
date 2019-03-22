@@ -13,7 +13,6 @@ username = ARGV[1]
 password = ARGV[2]
 registry_key = ARGV[3]
 value_name = ARGV[4]
-path     = "\\\\#{address}\\IPC$"
 
 sock = TCPSocket.new address, 445
 dispatcher = RubySMB::Dispatcher::Socket.new(sock, read_timeout: 60)
@@ -22,7 +21,9 @@ client = RubySMB::Client.new(dispatcher, smb1: true, smb2: true, username: usern
 protocol = client.negotiate
 status = client.authenticate
 
-puts "#{protocol} : #{status}"
+puts "#{protocol}: #{status}"
+puts "Key:   #{registry_key}"
+puts "Value: #{value_name}"
 
 key_value = client.read_registry_key_value(address, registry_key, value_name)
 puts key_value
